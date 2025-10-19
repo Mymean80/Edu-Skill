@@ -174,7 +174,9 @@ export default function HomePage() {
                       <BookOpen className="h-4 w-4 text-primary-foreground" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-card-foreground text-sm">{t.menyelesaikan}: React Fundamentals</p>
+                      <p className="font-medium text-card-foreground text-sm">
+                        {t.menyelesaikan}: {t.digitalTwinCourse}
+                      </p>
                       <p className="text-xs text-muted-foreground">2 {t.jamYangLalu}</p>
                     </div>
                   </div>
@@ -183,7 +185,9 @@ export default function HomePage() {
                       <Video className="h-4 w-4 text-secondary-foreground" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-card-foreground text-sm">{t.menonton}: JavaScript ES6 Tutorial</p>
+                      <p className="font-medium text-card-foreground text-sm">
+                        {t.menonton}: {t.predictiveMaintenanceCourse}
+                      </p>
                       <p className="text-xs text-muted-foreground">1 {t.hariYangLalu}</p>
                     </div>
                   </div>
