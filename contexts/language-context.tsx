@@ -29,6 +29,8 @@ interface Translations {
   menonton: string
   jamYangLalu: string
   hariYangLalu: string
+  digitalTwinCourse: string
+  predictiveMaintenanceCourse: string
 
   // Profile dropdown
   editProfile: string
@@ -65,7 +67,7 @@ const translations: Record<Language, Translations> = {
 
     searchPlaceholder: "Cari kursus, tutorial, atau artikel...",
     progressPembelajaran: "Progress Pembelajaran",
-    materiBelajar: "Materi belajar manufaktur",
+    materiBelajar: "Media Belajar",
     kursusOnline: "Kursus Online",
     videoTutorial: "Video Tutorial",
     artikel: "Artikel",
@@ -75,6 +77,8 @@ const translations: Record<Language, Translations> = {
     menonton: "Menonton",
     jamYangLalu: "jam yang lalu",
     hariYangLalu: "hari yang lalu",
+    digitalTwinCourse: "Teknologi Digital Twin & Simulasi Proses Manufaktur",
+    predictiveMaintenanceCourse: "Pengantar Predictive Maintenance dengan Analitik Data Pabrik",
 
     editProfile: "Edit Profile",
     riwayat: "Riwayat",
@@ -107,7 +111,7 @@ const translations: Record<Language, Translations> = {
 
     searchPlaceholder: "Search courses, tutorials, or articles...",
     progressPembelajaran: "Learning Progress",
-    materiBelajar: "Manufacturing learning materials",
+    materiBelajar: "Learning Media",
     kursusOnline: "Online Courses",
     videoTutorial: "Video Tutorials",
     artikel: "Articles",
@@ -117,6 +121,8 @@ const translations: Record<Language, Translations> = {
     menonton: "Watching",
     jamYangLalu: "hours ago",
     hariYangLalu: "day ago",
+    digitalTwinCourse: "Digital Twin Technology & Manufacturing Process Simulation",
+    predictiveMaintenanceCourse: "Introduction to Predictive Maintenance with Factory Data Analytics",
 
     editProfile: "Edit Profile",
     riwayat: "History",

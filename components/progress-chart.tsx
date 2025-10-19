@@ -24,12 +24,7 @@ export function ProgressChart() {
                 <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.1} />
               </linearGradient>
             </defs>
-            <XAxis
-              dataKey="name"
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-            />
+            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={false} />
             <YAxis hide />
             <Tooltip
               content={({ active, payload, label }) => {
