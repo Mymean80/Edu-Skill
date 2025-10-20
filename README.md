@@ -1,57 +1,30 @@
-# EduSkill: Manufacturing Education Application in the Industry 4.0 Era
+# Remix of Education and skill ap
 
-![Vercel Deployments](https://img.shields.io/badge/Deployed%20on%20Vercel-black?style=for-the-badge&logo=vercel)
+*Automatically synced with your [v0.app](https://v0.app) deployments*
 
-The **EduSkill Application** is an innovative educational platform specifically designed to meet the learning needs of professionals in the **manufacturing sector** as they navigate the challenges and opportunities presented by the **Industry 4.0** revolution. We focus on providing relevant, interactive, and easily accessible learning materials on key technologies such as **IoT, AI, Automation, and Data Analytics** within a manufacturing context.
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/rianwijaya2705-gmailcoms-projects/v0-remix-of-education-and-skill-ap)
+[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/HfAhPaZHXD2)
 
 ## Overview
 
-This project aims to bridge the knowledge gap between traditional manufacturing technology and the demands of Industry 4.0. EduSkill provides a personalized learning experience, allowing users to track their progress, manage their study schedules, and access various types of educational content.
-
-## Key Features (Fungsionalitas Utama)
-
-* **Personal Dashboard:** Track your **Learning Progress** and view your **Recent Activity** (such as completing courses or watching tutorials).
-* **Comprehensive Learning Material:** Access curated **Online Courses**, **Video Tutorials**, and **Articles** focused specifically on Manufacturing 4.0 topics.
-* **Task Management (To Do):** Easily manage your study tasks and integrate them with your calendar.
-* **Study Calendar (Calendar):** View upcoming class schedules, events, and assignment deadlines.
-* **Certification:** Receive a **Certificate** upon successful completion of modules or courses.
-* **Personalization:** Select your preferred **Color Scheme** and language settings.
-
-## Development Methodology (Metode Pengembangan)
-
-The development of EduSkill adopted a flexible and iterative **Agile Development** approach, combined with **User-Centered Design (UCD)** principles to ensure the interface is intuitive and relevant to its users. We executed the core phases of Design Thinking in our sprints: *Empathize & Define*, *Ideate*, *Prototype*, and *Test*.
-
-## Technology Stack
-
-EduSkill is built using modern web technologies to ensure optimal performance and a responsive user experience.
-
-* **Programming Languages:**
-    * **TypeScript:** ($85.3\%$) Used for application logic, data structure, and strong *type-checking*, supporting project scalability.
-    * **CSS:** ($14.2\%$) For aesthetic and consistent *styling* and user interface layout.
-    * **JavaScript:** ($0.5\%$) Used for lightweight scripts and specific functionalities.
-* **UI/UX Design:**
-    * **Figma:** Utilized for the *User Interface* (UI) and *User Experience* (UX) design process, including *wireframing* and *high-fidelity mockups*.
+This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
+Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
 
 ## Deployment
 
-This project is deployed using Vercel. You can access the EduSkill application via the following link:
+Your project is live at:
 
-**[https://education-skill.vercel.app/]([https://vercel.com/your-project-url-here](https://education-skill.vercel.app/))**
+**[https://vercel.com/rianwijaya2705-gmailcoms-projects/v0-remix-of-education-and-skill-ap](https://vercel.com/rianwijaya2705-gmailcoms-projects/v0-remix-of-education-and-skill-ap)**
 
-## How to Contribute
+## Build your app
 
-1.  *Fork* this repository.
-2.  Create a new *branch* (`git checkout -b feature/new-feature-name`).
-3.  Make your changes.
-4.  *Commit* your changes (`git commit -m 'Add new feature'`).
-5.  *Push* to your branch (`git push origin feature/new-feature-name`).
-6.  Open a *Pull Request*.
+Continue building your app on:
 
-## Contact
+**[https://v0.app/chat/projects/HfAhPaZHXD2](https://v0.app/chat/projects/HfAhPaZHXD2)**
 
-If you have any questions or suggestions, please feel free to reach out directly:
+## How It Works
 
-* **Discord:** `Mymean08`
-* **Discord:** `Skvventus`
-* **Discord:** ``
----
+1. Create and modify your project using [v0.app](https://v0.app)
+2. Deploy your chats from the v0 interface
+3. Changes are automatically pushed to this repository
+4. Vercel deploys the latest version from this repository
