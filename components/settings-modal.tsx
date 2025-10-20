@@ -1,6 +1,8 @@
 "use client"
 
-import type React from "react"
+import React from "react"
+
+import type { ReactNode } from "react"
 
 import { useState, useEffect } from "react"
 import { Settings, Globe, Palette, Moon, Sun, Bell, Save } from "lucide-react"
@@ -13,16 +15,19 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useLanguage } from "@/contexts/language-context"
 
 interface SettingsModalProps {
-  children: React.ReactNode
+  children: ReactNode
+  trigger?: "click" | "hover"
 }
 
-export function SettingsModal({ children }: SettingsModalProps) {
+export function SettingsModal({ children, trigger = "click" }: SettingsModalProps) {
   const { language, setLanguage: setGlobalLanguage, t } = useLanguage()
   const [colorScheme, setColorScheme] = useState("default")
   const [darkMode, setDarkMode] = useState(false)
   const [notifications, setNotifications] = useState(true)
   const [autoSave, setAutoSave] = useState(true)
   const [open, setOpen] = useState(false)
+  const [hoverOpen, setHoverOpen] = useState(false)
+  const hoverTimeoutRef = React.createRef<any>()
 
   useEffect(() => {
     const root = document.documentElement
@@ -46,6 +51,23 @@ export function SettingsModal({ children }: SettingsModalProps) {
     if (savedAutoSave) setAutoSave(savedAutoSave === "true")
   }, [])
 
+  const handleMouseEnter = () => {
+    if (trigger === "hover") {
+      hoverTimeoutRef.current = setTimeout(() => {
+        setOpen(true)
+      }, 200)
+    }
+  }
+
+  const handleMouseLeave = () => {
+    if (trigger === "hover") {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current)
+      }
+      setOpen(false)
+    }
+  }
+
   const handleSaveChanges = () => {
     localStorage.setItem("eduskill-color-scheme", colorScheme)
     localStorage.setItem("eduskill-dark-mode", darkMode.toString())
@@ -61,8 +83,10 @@ export function SettingsModal({ children }: SettingsModalProps) {
   ]
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog open={open} onOpenChange={trigger === "click" ? setOpen : undefined}>
+      <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <DialogTrigger asChild>{children}</DialogTrigger>
+      </div>
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
