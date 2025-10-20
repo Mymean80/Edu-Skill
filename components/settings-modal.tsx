@@ -1,16 +1,21 @@
 "use client"
 
-import React from "react"
-
 import type { ReactNode } from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Settings, Globe, Palette, Moon, Sun, Bell, Save } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription,
+} from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useLanguage } from "@/contexts/language-context"
 
@@ -26,8 +31,8 @@ export function SettingsModal({ children, trigger = "click" }: SettingsModalProp
   const [notifications, setNotifications] = useState(true)
   const [autoSave, setAutoSave] = useState(true)
   const [open, setOpen] = useState(false)
-  const [hoverOpen, setHoverOpen] = useState(false)
-  const hoverTimeoutRef = React.createRef<any>()
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const isHoveringRef = useRef(false)
 
   useEffect(() => {
     const root = document.documentElement
@@ -51,20 +56,39 @@ export function SettingsModal({ children, trigger = "click" }: SettingsModalProp
     if (savedAutoSave) setAutoSave(savedAutoSave === "true")
   }, [])
 
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current)
+      }
+    }
+  }, [])
+
   const handleMouseEnter = () => {
     if (trigger === "hover") {
+      isHoveringRef.current = true
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current)
+      }
       hoverTimeoutRef.current = setTimeout(() => {
-        setOpen(true)
+        if (isHoveringRef.current) {
+          setOpen(true)
+        }
       }, 200)
     }
   }
 
   const handleMouseLeave = () => {
     if (trigger === "hover") {
+      isHoveringRef.current = false
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current)
       }
-      setOpen(false)
+      hoverTimeoutRef.current = setTimeout(() => {
+        if (!isHoveringRef.current) {
+          setOpen(false)
+        }
+      }, 100)
     }
   }
 
@@ -83,124 +107,131 @@ export function SettingsModal({ children, trigger = "click" }: SettingsModalProp
   ]
 
   return (
-    <Dialog open={open} onOpenChange={trigger === "click" ? setOpen : undefined}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
         <DialogTrigger asChild>{children}</DialogTrigger>
       </div>
-      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Settings className="h-5 w-5" />
-            {t.settings}
-          </DialogTitle>
-        </DialogHeader>
+      <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Settings className="h-5 w-5" />
+              {t.settings}
+            </DialogTitle>
+            <DialogDescription>
+              {t.language === "id"
+                ? "Kelola preferensi dan pengaturan aplikasi Anda"
+                : "Manage your application preferences and settings"}
+            </DialogDescription>
+          </DialogHeader>
 
-        <div className="space-y-6">
-          {/* Language Settings */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Globe className="h-5 w-5" />
-                {t.language}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Select value={language} onValueChange={setGlobalLanguage}>
-                <SelectTrigger>
-                  <SelectValue placeholder={t.selectLanguage} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="id">{t.bahasaIndonesia}</SelectItem>
-                  <SelectItem value="en">{t.english}</SelectItem>
-                </SelectContent>
-              </Select>
-            </CardContent>
-          </Card>
+          <div className="space-y-6">
+            {/* Language Settings */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Globe className="h-5 w-5" />
+                  {t.language}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Select value={language} onValueChange={setGlobalLanguage}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={t.selectLanguage} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="id">{t.bahasaIndonesia}</SelectItem>
+                    <SelectItem value="en">{t.english}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </CardContent>
+            </Card>
 
-          {/* Color Scheme Settings */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Palette className="h-5 w-5" />
-                {t.colorScheme}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 gap-4">
-                {colorSchemes.map((scheme) => (
-                  <div
-                    key={scheme.value}
-                    className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
-                      colorScheme === scheme.value
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:border-primary/50"
-                    }`}
-                    onClick={() => setColorScheme(scheme.value)}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-16 h-10 rounded overflow-hidden">
-                        <img
-                          src={scheme.preview || "/placeholder.svg"}
-                          alt={scheme.label}
-                          className="w-full h-full object-cover"
-                        />
+            {/* Color Scheme Settings */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Palette className="h-5 w-5" />
+                  {t.colorScheme}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 gap-4">
+                  {colorSchemes.map((scheme) => (
+                    <div
+                      key={scheme.value}
+                      className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                        colorScheme === scheme.value
+                          ? "border-primary bg-primary/5"
+                          : "border-border hover:border-primary/50"
+                      }`}
+                      onClick={() => setColorScheme(scheme.value)}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-16 h-10 rounded overflow-hidden">
+                          <img
+                            src={scheme.preview || "/placeholder.svg"}
+                            alt={scheme.label}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <span className="font-medium">{scheme.label}</span>
+                        {colorScheme === scheme.value && <div className="ml-auto w-4 h-4 bg-primary rounded-full" />}
                       </div>
-                      <span className="font-medium">{scheme.label}</span>
-                      {colorScheme === scheme.value && <div className="ml-auto w-4 h-4 bg-primary rounded-full" />}
                     </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
-          {/* Display Settings */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                {darkMode ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-                {t.display}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="dark-mode" className="flex items-center gap-2">
-                  {t.darkMode}
-                </Label>
-                <Switch id="dark-mode" checked={darkMode} onCheckedChange={setDarkMode} />
-              </div>
-            </CardContent>
-          </Card>
+            {/* Display Settings */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  {darkMode ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+                  {t.display}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="dark-mode" className="flex items-center gap-2">
+                    {t.darkMode}
+                  </Label>
+                  <Switch id="dark-mode" checked={darkMode} onCheckedChange={setDarkMode} />
+                </div>
+              </CardContent>
+            </Card>
 
-          {/* Other Settings */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Bell className="h-5 w-5" />
-                {t.preferences}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="notifications">{t.notifications}</Label>
-                <Switch id="notifications" checked={notifications} onCheckedChange={setNotifications} />
-              </div>
-              <div className="flex items-center justify-between">
-                <Label htmlFor="auto-save">{t.autoSave}</Label>
-                <Switch id="auto-save" checked={autoSave} onCheckedChange={setAutoSave} />
-              </div>
-            </CardContent>
-          </Card>
+            {/* Other Settings */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Bell className="h-5 w-5" />
+                  {t.preferences}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="notifications">{t.notifications}</Label>
+                  <Switch id="notifications" checked={notifications} onCheckedChange={setNotifications} />
+                </div>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="auto-save">{t.autoSave}</Label>
+                  <Switch id="auto-save" checked={autoSave} onCheckedChange={setAutoSave} />
+                </div>
+              </CardContent>
+            </Card>
 
-          {/* Save Button */}
-          <div className="flex justify-end">
-            <Button className="flex items-center gap-2" onClick={handleSaveChanges}>
-              <Save className="h-4 w-4" />
-              {t.saveChanges}
-            </Button>
+            {/* Save Button */}
+            <div className="flex justify-end">
+              <Button className="flex items-center gap-2" onClick={handleSaveChanges}>
+                <Save className="h-4 w-4" />
+                {t.saveChanges}
+              </Button>
+            </div>
           </div>
-        </div>
-      </DialogContent>
+        </DialogContent>
+      </div>
     </Dialog>
   )
 }

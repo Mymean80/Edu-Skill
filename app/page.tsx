@@ -2,18 +2,11 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Search, User, BookOpen, Video, FileText, Award, Settings, History, LogOut } from "lucide-react"
+import { Search, User, BookOpen, Video, FileText, Award } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { ProgressChart } from "@/components/progress-chart"
 // import { Sidebar } from "@/components/sidebar"
 import { SettingsModal } from "@/components/settings-modal"
@@ -35,15 +28,14 @@ export default function HomePage() {
       {/* <Sidebar /> */} {/* Sidebar moved to layout for a dedicated global section */}
       <div className="ml-16">
         {/* Header */}
-        <header className="flex items-center justify-between p-4 bg-card border-b border-border">
+        <header className="flex items-center justify-between p-4 bg-card border-b border-border sticky top-0 z-50">
           <div className="flex items-center gap-2">
             <BookOpen className="h-6 w-6 text-primary" />
             <h1 className="text-xl font-heading font-bold text-primary">EduSkill</h1>
           </div>
 
-          {/* Profile Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+          <div className="fixed top-4 right-4 z-50">
+            <SettingsModal trigger="hover">
               <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                 <Avatar className="h-10 w-10">
                   <AvatarImage src="/abstract-profile.png" alt="Profile" />
@@ -52,53 +44,8 @@ export default function HomePage() {
                   </AvatarFallback>
                 </Avatar>
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-64 p-4" align="end">
-              <div className="flex items-center space-x-3 mb-4">
-                <Avatar className="h-12 w-12">
-                  <AvatarImage src="/abstract-profile.png" alt="Profile" />
-                  <AvatarFallback className="bg-primary text-primary-foreground">
-                    <User className="h-6 w-6" />
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="font-heading font-semibold text-card-foreground">John Doe</p>
-                  <p className="text-sm text-muted-foreground">john.doe@email.com</p>
-                </div>
-              </div>
-
-              <SettingsModal>
-                <Button variant="outline" className="w-full mb-3 bg-transparent" size="sm">
-                  <Settings className="h-4 w-4 mr-2" />
-                  {t.editProfile}
-                </Button>
-              </SettingsModal>
-
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem className="cursor-pointer">
-                <History className="h-4 w-4 mr-2" />
-                {t.riwayat}
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                <Award className="h-4 w-4 mr-2" />
-                {t.sertifikatSaya}
-              </DropdownMenuItem>
-              <SettingsModal>
-                <div className="flex items-center w-full px-2 py-1.5 text-sm cursor-pointer hover:bg-accent rounded-sm">
-                  <Settings className="h-4 w-4 mr-2" />
-                  {t.pengaturan}
-                </div>
-              </SettingsModal>
-
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem className="cursor-pointer text-destructive">
-                <LogOut className="h-4 w-4 mr-2" />
-                {t.keluar}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </SettingsModal>
+          </div>
         </header>
 
         {/* Main Content */}
