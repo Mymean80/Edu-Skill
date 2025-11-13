@@ -1,12 +1,9 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Space_Grotesk, DM_Sans } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
-import { Suspense } from "react"
+import { Space_Grotesk, DM_Sans } from "next/font/google"
 import "./globals.css"
-import { Sidebar } from "@/components/sidebar"
-import { PageTransition } from "@/components/page-transition"
-import { LanguageProvider } from "@/contexts/language-context"
+import { Providers } from "./providers"
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -28,18 +25,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
     <html lang="id">
       <body className={`font-sans ${dmSans.variable} ${spaceGrotesk.variable}`}>
-        <LanguageProvider>
-          <Sidebar />
-          <Suspense fallback={null}>
-            <PageTransition>{children}</PageTransition>
-          </Suspense>
-        </LanguageProvider>
+        <Providers>{children}</Providers>
         <Analytics />
       </body>
     </html>

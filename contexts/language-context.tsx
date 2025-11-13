@@ -52,6 +52,15 @@ interface Translations {
   notifications: string
   autoSave: string
   saveChanges: string
+
+  // Login-related translations
+  login: string
+  loginDescription: string
+  email: string
+  password: string
+  loggingIn: string
+  defaultCredentials: string
+  invalidCredentials: string
 }
 
 const translations: Record<Language, Translations> = {
@@ -98,6 +107,15 @@ const translations: Record<Language, Translations> = {
     notifications: "Notifikasi",
     autoSave: "Simpan Otomatis",
     saveChanges: "Simpan Perubahan",
+
+    // Indonesian login translations
+    login: "Masuk",
+    loginDescription: "Masukkan kredensial Anda untuk mengakses EduSkill",
+    email: "Email",
+    password: "Kata Sandi",
+    loggingIn: "Sedang Masuk...",
+    defaultCredentials: "Kredensial demo: user@gmail.com / user123",
+    invalidCredentials: "Email atau kata sandi tidak valid",
   },
   en: {
     menu: "Menu",
@@ -142,6 +160,15 @@ const translations: Record<Language, Translations> = {
     notifications: "Notifications",
     autoSave: "Auto Save",
     saveChanges: "Save Changes",
+
+    // English login translations
+    login: "Login",
+    loginDescription: "Enter your credentials to access EduSkill",
+    email: "Email",
+    password: "Password",
+    loggingIn: "Logging in...",
+    defaultCredentials: "Demo credentials: user@gmail.com / user123",
+    invalidCredentials: "Invalid email or password",
   },
 }
 

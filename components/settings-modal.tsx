@@ -3,7 +3,7 @@
 import type { ReactNode } from "react"
 
 import { useState, useEffect, useRef } from "react"
-import { Settings, Globe, Palette, Moon, Sun, Bell, Save } from "lucide-react"
+import { Settings, Globe, Palette, Moon, Sun, Bell, Save, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useLanguage } from "@/contexts/language-context"
+import { useAuth } from "@/contexts/auth-context"
 
 interface SettingsModalProps {
   children: ReactNode
@@ -26,6 +27,7 @@ interface SettingsModalProps {
 
 export function SettingsModal({ children, trigger = "click" }: SettingsModalProps) {
   const { language, setLanguage: setGlobalLanguage, t } = useLanguage()
+  const { logout } = useAuth()
   const [colorScheme, setColorScheme] = useState("default")
   const [darkMode, setDarkMode] = useState(false)
   const [notifications, setNotifications] = useState(true)
@@ -100,10 +102,15 @@ export function SettingsModal({ children, trigger = "click" }: SettingsModalProp
     setOpen(false)
   }
 
+  const handleLogout = () => {
+    logout()
+    setOpen(false)
+  }
+
   const colorSchemes = [
-    { value: "default", label: "Default Green", preview: "/color-scheme-1.png" },
-    { value: "ocean", label: "Ocean Blue", preview: "/color-scheme-2.png" },
-    { value: "teal", label: "Teal Burst", preview: "/color-scheme-3.png" },
+    { value: "default", label: "Default Green", preview: "/color-scheme-1.jpg" },
+    { value: "ocean", label: "Ocean Blue", preview: "/color-scheme-2.jpg" },
+    { value: "teal", label: "Teal Burst", preview: "/color-scheme-3.jpg" },
   ]
 
   return (
@@ -168,11 +175,14 @@ export function SettingsModal({ children, trigger = "click" }: SettingsModalProp
                       onClick={() => setColorScheme(scheme.value)}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-16 h-10 rounded overflow-hidden">
+                        <div className="w-16 h-10 rounded overflow-hidden bg-gradient-to-r">
                           <img
                             src={scheme.preview || "/placeholder.svg"}
                             alt={scheme.label}
                             className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = "/placeholder.svg"
+                            }}
                           />
                         </div>
                         <span className="font-medium">{scheme.label}</span>
@@ -219,6 +229,22 @@ export function SettingsModal({ children, trigger = "click" }: SettingsModalProp
                   <Label htmlFor="auto-save">{t.autoSave}</Label>
                   <Switch id="auto-save" checked={autoSave} onCheckedChange={setAutoSave} />
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Logout Button Section */}
+            <Card className="border-destructive/50">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg text-destructive">
+                  <LogOut className="h-5 w-5" />
+                  {t.language === "id" ? "Keluar" : "Account"}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Button variant="destructive" className="w-full flex items-center gap-2" onClick={handleLogout}>
+                  <LogOut className="h-4 w-4" />
+                  {t.keluar}
+                </Button>
               </CardContent>
             </Card>
 
