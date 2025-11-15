@@ -3,7 +3,7 @@
 import type { ReactNode } from "react"
 
 import { useState, useEffect, useRef } from "react"
-import { Settings, Globe, Palette, Moon, Sun, Bell, Save, LogOut } from "lucide-react"
+import { Settings, Globe, Palette, Moon, Sun, Bell, Save, LogOut, Lock } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
@@ -17,6 +17,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 
@@ -27,11 +28,16 @@ interface SettingsModalProps {
 
 export function SettingsModal({ children, trigger = "click" }: SettingsModalProps) {
   const { language, setLanguage: setGlobalLanguage, t } = useLanguage()
-  const { logout } = useAuth()
+  const { logout, updateCredentials, currentEmail } = useAuth()
   const [colorScheme, setColorScheme] = useState("default")
   const [darkMode, setDarkMode] = useState(false)
   const [notifications, setNotifications] = useState(true)
   const [autoSave, setAutoSave] = useState(true)
+  const [newEmail, setNewEmail] = useState(currentEmail)
+  const [newPassword, setNewPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [credentialError, setCredentialError] = useState("")
+  const [credentialSuccess, setCredentialSuccess] = useState(false)
   const [open, setOpen] = useState(false)
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const isHoveringRef = useRef(false)
@@ -105,6 +111,37 @@ export function SettingsModal({ children, trigger = "click" }: SettingsModalProp
   const handleLogout = () => {
     logout()
     setOpen(false)
+  }
+
+  const handleUpdateCredentials = () => {
+    setCredentialError("")
+    setCredentialSuccess(false)
+
+    if (!newEmail.trim()) {
+      setCredentialError(t.language === "id" ? "Email tidak boleh kosong" : "Email cannot be empty")
+      return
+    }
+
+    if (!newPassword.trim()) {
+      setCredentialError(t.language === "id" ? "Kata sandi tidak boleh kosong" : "Password cannot be empty")
+      return
+    }
+
+    if (newPassword !== confirmPassword) {
+      setCredentialError(t.language === "id" ? "Kata sandi tidak cocok" : "Passwords do not match")
+      return
+    }
+
+    if (newPassword.length < 6) {
+      setCredentialError(t.language === "id" ? "Kata sandi minimal 6 karakter" : "Password must be at least 6 characters")
+      return
+    }
+
+    updateCredentials(newEmail, newPassword)
+    setCredentialSuccess(true)
+    setNewPassword("")
+    setConfirmPassword("")
+    setTimeout(() => setCredentialSuccess(false), 3000)
   }
 
   const colorSchemes = [
@@ -229,6 +266,62 @@ export function SettingsModal({ children, trigger = "click" }: SettingsModalProp
                   <Label htmlFor="auto-save">{t.autoSave}</Label>
                   <Switch id="auto-save" checked={autoSave} onCheckedChange={setAutoSave} />
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Change Credentials Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Lock className="h-5 w-5" />
+                  {t.language === "id" ? "Ubah Kredensial" : "Change Credentials"}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="new-email">{t.email}</Label>
+                  <Input
+                    id="new-email"
+                    type="email"
+                    value={newEmail}
+                    onChange={(e) => setNewEmail(e.target.value)}
+                    placeholder={t.email}
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="new-password">{t.password}</Label>
+                  <Input
+                    id="new-password"
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder={t.password}
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="confirm-password">
+                    {t.language === "id" ? "Konfirmasi Kata Sandi" : "Confirm Password"}
+                  </Label>
+                  <Input
+                    id="confirm-password"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder={t.language === "id" ? "Konfirmasi kata sandi" : "Confirm password"}
+                    className="mt-1"
+                  />
+                </div>
+                {credentialError && <div className="text-sm text-destructive">{credentialError}</div>}
+                {credentialSuccess && (
+                  <div className="text-sm text-green-600">
+                    {t.language === "id" ? "Kredensial berhasil diperbarui" : "Credentials updated successfully"}
+                  </div>
+                )}
+                <Button className="w-full" onClick={handleUpdateCredentials}>
+                  {t.language === "id" ? "Perbarui Kredensial" : "Update Credentials"}
+                </Button>
               </CardContent>
             </Card>
 
